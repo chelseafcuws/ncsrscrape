@@ -214,7 +214,8 @@ finaldf = finaldf[finaldf['FactID'] != '']
 # add the PeriodFP column Conditionally
 finaldf['PeriodFP'] = finaldf['FormCode'].apply(lambda x: 'FY' if x == 'N-CSR' else 'SA')
 # Clean the ValueNum column
-finaldf.loc[:, 'ValueNum'] = finaldf['ValueNum'].astype(str).str.replace('$', '', regex=False)
+finaldf.loc[:, 'ValueNum'] = finaldf['ValueNum'].astype(str).str.replace('$', '-', regex=False).str.replace('(', '-', regex=False).str.replace(')', '', regex=False).str.replace(',', '', regex=False)
+finaldf.loc[:, 'ValueNum'] = finaldf['ValueNum'].str.extract(r'([-]?\d*\.?\d+|\d+)', expand=False)
 
 df = finaldf[['CIK', 'FundID', 'FactID', 'FactTag', 'Measure', 'ValueNum', 'FormCode','Period', 'reportDate', 'PeriodFY', 'PeriodFP', 'StartDate', 'EndDate']]
 
